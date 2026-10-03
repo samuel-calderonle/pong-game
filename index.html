@@ -8,13 +8,26 @@
   </head>
   <body>
     <div class="game-wrap">
-      <div class="scoreboard">
-        <div class="score" id="leftScore">0</div>
-        <div class="divider">:</div>
-        <div class="score" id="rightScore">0</div>
+      <div id="startScreen" class="start-screen">
+        <h1>🎮 PONG</h1>
+        <p>Choose your control method:</p>
+        <div class="control-buttons">
+          <button id="mouseBtn" class="control-btn">🖱️ Mouse Control</button>
+          <button id="keyboardBtn" class="control-btn">⌨️ Arrow Keys</button>
+        </div>
       </div>
 
-      <canvas id="gameCanvas" width="800" height="500"></canvas>
+      <div id="gameContainer" class="game-container hidden">
+        <div class="scoreboard">
+          <div class="score" id="leftScore">0</div>
+          <div class="divider">:</div>
+          <div class="score" id="rightScore">0</div>
+        </div>
+
+        <canvas id="gameCanvas" width="800" height="500"></canvas>
+
+        <button id="resetBtn" class="reset-btn">Reset Game</button>
+      </div>
     </div>
 
     <script src="script.js"></script>

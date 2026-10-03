@@ -8,8 +8,8 @@
   </head>
   <body>
     <div class="game-wrap">
-      <div id="startScreen" class="start-screen">
-        <h1>🎮 PONG</h1>
+      <div id="startScreen" class="panel">
+        <h1>PONG</h1>
         <p>Choose a difficulty and start the match.</p>
 
         <div class="difficulty-row">
@@ -24,6 +24,7 @@
       <div id="gameContainer" class="game-container hidden">
         <div class="hud-row">
           <div class="best-score">Best: <span id="bestScore">0</span></div>
+          <div class="status" id="statusText">Running</div>
         </div>
 
         <div class="scoreboard">
@@ -35,7 +36,18 @@
         <canvas id="gameCanvas" width="800" height="500"></canvas>
 
         <div class="game-actions">
-          <button id="resetBtn" class="secondary-btn">Back to Menu</button>
+          <button id="pauseBtn" class="secondary-btn">Pause</button>
+          <button id="menuBtn" class="secondary-btn">Menu</button>
+        </div>
+      </div>
+
+      <div id="gameOverOverlay" class="overlay hidden">
+        <div class="overlay-card">
+          <h2 id="winnerText">Player Wins!</h2>
+          <div class="overlay-actions">
+            <button id="playAgainBtn" class="primary-btn">Play Again</button>
+            <button id="overlayMenuBtn" class="secondary-btn">Main Menu</button>
+          </div>
         </div>
       </div>
     </div>

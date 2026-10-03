@@ -22,7 +22,7 @@ const WIN_SCORE = 7;
 const difficultySettings = {
   easy: { aiSpeed: 3.4, ballSpeed: 5.2, label: "Easy" },
   medium: { aiSpeed: 4.6, ballSpeed: 6, label: "Medium" },
-  hard: { aiSpeed: 6.1, ballSpeed: 6.8, label: "Hard" }
+  hard: { aiSpeed: 8.5, ballSpeed: 7.5, label: "Hard" }
 };
 
 const game = {
@@ -68,8 +68,6 @@ const ball = {
 let mouseY = null;
 let animationId = null;
 let particles = [];
-let powerUp = null;
-let lastPowerUpSpawn = 0;
 const screenShake = { intensity: 0, duration: 0 };
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -191,8 +189,7 @@ function playSound(type) {
     hit: 180,
     wall: 120,
     score: 260,
-    menu: 110,
-    power: 320
+    menu: 110
   };
 
   oscillator.type = type === "score" ? "triangle" : "square";
@@ -202,67 +199,6 @@ function playSound(type) {
   oscillator.start();
   gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.08);
   oscillator.stop(audioCtx.currentTime + 0.08);
-}
-
-function startPowerUp() {
-  if (powerUp || !game.running) return;
-
-  const types = ["grow", "slow"];
-  const type = types[Math.floor(Math.random() * types.length)];
-  powerUp = {
-    type,
-    x: 200 + Math.random() * 400,
-    y: 80 + Math.random() * 330,
-    radius: 12,
-    color: type === "grow" ? "#7dd3fc" : "#facc15"
-  };
-}
-
-function updatePowerUp(dt) {
-  if (!game.running) return;
-
-  lastPowerUpSpawn += dt;
-  if (lastPowerUpSpawn > 8.5 && !powerUp) {
-    startPowerUp();
-    lastPowerUpSpawn = 0;
-  }
-
-  if (!powerUp) return;
-
-  const ballDist = Math.hypot(ball.x - powerUp.x, ball.y - powerUp.y);
-  if (ballDist < ball.radius + powerUp.radius) {
-    if (powerUp.type === "grow") {
-      leftPaddle.height = 128;
-      leftPaddle.growTimer = 6;
-      spawnParticles(powerUp.x, powerUp.y, "#7dd3fc", 18);
-      triggerScreenShake(7, 0.12);
-      playSound("power");
-    } else {
-      rightPaddle.speed = rightPaddle.speed * 0.7;
-      rightPaddle.slowTimer = 6;
-      spawnParticles(powerUp.x, powerUp.y, "#facc15", 18);
-      triggerScreenShake(7, 0.12);
-      playSound("power");
-    }
-
-    powerUp = null;
-  }
-}
-
-function updatePaddleTimers(dt) {
-  if (leftPaddle.growTimer > 0) {
-    leftPaddle.growTimer -= dt;
-    if (leftPaddle.growTimer <= 0) {
-      leftPaddle.height = leftPaddle.baseHeight;
-    }
-  }
-
-  if (rightPaddle.slowTimer > 0) {
-    rightPaddle.slowTimer -= dt;
-    if (rightPaddle.slowTimer <= 0) {
-      rightPaddle.speed = difficultySettings[game.difficulty].aiSpeed;
-    }
-  }
 }
 
 function paddleCollision(ballObj, paddle) {
@@ -371,20 +307,6 @@ function drawCenterLine() {
   ctx.setLineDash([]);
 }
 
-function drawPowerUp() {
-  if (!powerUp) return;
-
-  ctx.beginPath();
-  ctx.fillStyle = powerUp.color;
-  ctx.arc(powerUp.x, powerUp.y, powerUp.radius, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.beginPath();
-  ctx.fillStyle = "rgba(255,255,255,0.25)";
-  ctx.arc(powerUp.x, powerUp.y, powerUp.radius + 3, 0, Math.PI * 2);
-  ctx.fill();
-}
-
 function drawParticles() {
   particles.forEach((particle) => {
     ctx.fillStyle = particle.color;
@@ -406,7 +328,6 @@ function render() {
   ctx.clearRect(0, 0, game.width, game.height);
 
   drawCenterLine();
-  drawPowerUp();
   drawPaddle(leftPaddle);
   drawPaddle(rightPaddle);
   drawBall();
@@ -436,8 +357,6 @@ function startGame() {
   leftPaddle.growTimer = 0;
 
   resetBall(Math.random() > 0.5 ? 1 : -1);
-  lastPowerUpSpawn = 0;
-  powerUp = null;
   statusText.textContent = "Running";
   pauseBtn.textContent = "Pause";
 }
@@ -489,8 +408,6 @@ function gameLoop(timestamp) {
   if (game.running && !game.paused && !game.gameOver) {
     moveLeftPaddle();
     moveComputerPaddle();
-    updatePaddleTimers(dt);
-    updatePowerUp(dt);
     updateBall(dt);
     updateParticles(dt);
     updateScreenShake(dt);

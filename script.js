@@ -70,15 +70,13 @@ function handleKeyUp(event) {
 }
 
 function moveLeftPaddle() {
+  // Arrow keys take priority
   if (keys.ArrowUp) {
     leftPaddle.y -= leftPaddle.speed;
-  }
-
-  if (keys.ArrowDown) {
+  } else if (keys.ArrowDown) {
     leftPaddle.y += leftPaddle.speed;
-  }
-
-  if (mouseY !== null) {
+  } else if (mouseY !== null) {
+    // Only use mouse if arrow keys aren't pressed
     const targetY = mouseY - leftPaddle.height / 2;
     leftPaddle.y += (targetY - leftPaddle.y) * 0.18;
   }

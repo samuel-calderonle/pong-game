@@ -2,8 +2,6 @@
 
 A polished browser-based Pong clone built with vanilla HTML, CSS, and JavaScript. This project delivers a retro arcade experience with a modern interface, multiple difficulty levels, local high-score tracking, and a responsive single-page gameplay loop.
 
-![Pong Game](https://img.shields.io/badge/Stack-HTML%20%2B%20CSS%20%2B%20JS-4B8BBE?style=for-the-badge) ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
-
 ## Live Demo
 
 Play online here:

@@ -18,7 +18,6 @@ This project recreates the classic Pong experience in the browser with:
 - responsive canvas-based rendering
 - keyboard and mouse controls
 - game pause / resume / menu flow
-- occasional power-ups to add excitement
 - lightweight, dependency-free setup
 
 The game is intentionally simple and self-contained, making it a great example of a small arcade project built using only core web technologies.
